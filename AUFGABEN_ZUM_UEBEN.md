@@ -64,7 +64,7 @@ Nutze den **LINUX_ANFAENGER_GUIDE.md** um diese Aufgaben zu lösen!
 2. Filtere nur die `.txt` Dateien heraus
 3. Zähle wie viele es sind
 
-**Hinweis:** `find`, `grep`, Pipe `|`, `-c`
+**Hinweis:** `find`, Pipe `|`, `wc -l` (wc = word count, -l = lines)
 
 ---
 
@@ -179,7 +179,7 @@ Nutze den **LINUX_ANFAENGER_GUIDE.md** um diese Aufgaben zu lösen!
 2. Finde alle Dateien größer als 100 Bytes
 3. Zähle wie viele `.txt` Dateien es insgesamt gibt
 
-**Hinweis:** `find`, `-size`, `grep -c`, Pipes
+**Hinweis:** `find`, `-size`, `wc -l`, Pipes
 
 ---
 
