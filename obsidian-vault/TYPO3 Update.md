@@ -137,13 +137,38 @@ Danach prüfen:
 
 Wenn hier Schluss für heute ist → Ticket auf **Internal Testing**.
 
+## Merge-Regel
+
+> [!important] Auf dem Branch stehen, der sich ändern soll
+> ```bash
+> git checkout <WOHIN>
+> git merge <WAS>
+> ```
+> Nach dem Merge bleibt man auf dem Branch, auf dem man stand.
+
+| Ich will | Ich stehe auf | Befehl | Danach stehe ich auf |
+|---|---|---|---|
+| frischen master **in meinen Branch** holen | meinem Branch | `git merge origin/master` | meinem Branch |
+| meinen Branch **nach testing** | `testing` | `git merge FAU-1934-composer-update` | `testing` |
+| meinen Branch **nach master** (lokal, nur mit Erlaubnis) | `master` | `git merge FAU-1934-composer-update` | `master` |
+
+Ist master weitergelaufen?
+
+```bash
+git fetch
+git log --oneline <mein-branch>..origin/master    # leer = alles aktuell
+```
+
 ## 6. Production
 
 Erst nach grünem Testing. Merge nach `main`/`master` = **Deploy auf die Live-Seite des Kunden**.
 
-- PR vom eigenen Branch nach `main`/`master`
+- vorher prüfen, ob master weitergelaufen ist (siehe Merge-Regel), ggf. `git merge origin/master` + `git push`
+- PR vom eigenen Branch nach `main`/`master` — Bitbucket merged auf dem Server, lokal steht man dafür nicht auf master
+- im PR rechts prüfen: nur die erwarteten Dateien (meist 2). Mehr → master in testing/Branch fehlt
 - Reviewer: bei meinen Projekten fast immer **Johannes Sommer**
 - nach dem Merge Frontend und Backend auf Production nachschauen
+- lokal nachziehen: `git checkout master && git pull`
 - Ticket → **In Review Production**, zugewiesene Person: Johannes
 
 > [!important] Merge-Button nicht still drücken
@@ -171,7 +196,15 @@ Der lokale Git-Hook ruft php auf dem Host auf, php läuft aber nur im ddev-Conta
 | SWG | `master` | `testing` | Merge nach `master` |
 | Sprungbrett | `main` | `testing` | Merge nach `main` |
 | vrs | `master` | `testing` | Merge nach `master` |
-| Faulhaber | ? | ? | ? |
+| Faulhaber | `master` | `testing` → Env **Test**: `test.faulhaber.wwwserver.net` | PR nach `master` |
+
+> [!note] Faulhaber
+> Testing-URL steht im Pipeline-Log, Schritt *Deploy to Testing*, Zeile `rsync … /srv/www/faulhaber/test.faulhaber.wwwserver.net/`.
+> Browser-Login (htaccess): Bitwarden → **Faulhaber htaccess (für alle Systeme, mailpit)**. Nicht „DAM Test" — das ist ein anderes System.
+> Bitbucket-Environment **Integration** ist seit Mai verwaist — **Test** ist das richtige.
+
+> [!note] Testing sieht anders aus als Live
+> Merge synchronisiert **Code**, nicht **Inhalt**. Seiten, Slider, Texte liegen in der DB und in `fileadmin` — jede Umgebung hat ihre eigene. Auf Testing prüfen, **ob es funktioniert**, nicht ob es gleich aussieht. Und beim Vergleichen auf die gleiche Sprache achten (`/de/` vs `/en/`).
 
 Immer nachsehen:
 
